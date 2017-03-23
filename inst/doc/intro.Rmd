@@ -1,0 +1,19 @@
+---
+title: "mypackage: A set of functions and templates I maintain"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{mypackage: a set of functions and templates I maintain}
+  %\VignettePackage{mypackage}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+
+```{r, echo = FALSE, message = FALSE}
+knitr::opts_chunk$set(comment = "")
+library(mypackage)
+```
+
+This package is meant to be a starter package for people that want to maintain a package as a means to retain R knowledge. This is an example vignette. One might show examples of various parts of the package using vignettes. This can supplement the help documentation.:w
+

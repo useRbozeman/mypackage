@@ -1,0 +1,264 @@
+---
+title: "An Interesting Study Title"
+author: "Jordan Schupbach"
+client: Jane Doe
+output:
+  html_document:
+    css: csrs.css
+    fig_caption: yes
+    highlight: tango
+    template: cscrs
+    theme: null
+header-includes: \def\tightlist{booktabs}
+director: Lillian S. Lin, Ph.D.
+secondary: Andrea Mack
+spacing: 1
+bibliography: bibliography.bib
+titlepage: yes
+--- 
+
+```{r pkgs, echo = FALSE, message = FALSE}
+# Initialize environment 
+
+# R Packages:
+library(xtable)  ## For printing tables
+library(stargazer) ## For printing summary data and anova tables
+library(psych)
+library(beanplot)
+library(car)
+library(pander)
+library(knitr)
+library(htmlTable)
+library(ggplot2)
+library(plotly)
+library(GGally)
+library(MASS)
+```
+
+```{r, echo = FALSE}
+knit_hooks$set(htmlcap = function(before, options, envir) {
+  if(!before) {
+    paste('<p class="caption">',options$htmlcap,"</p>",sep="")
+    }
+    })
+```
+
+Introduction
+============
+
+This famous (Fisher's or Anderson's) iris data set [@anderson:1936] gives the measurements in centimeters of the variables sepal length and width and petal length and width, respectively, for 50 flowers from each of 3 species of iris. The species are Iris setosa, versicolor, and virginica.
+
+Description of Data
+==================
+
+This dataset has 1 categorical variable and 4 quantitative variables. Whether a variable is the explanatory variable or the dependent variable may depend on the model being considered motivated by some question of interest. Before looking at any models, we want to get familiar with the data. In the very least, we will want to summarize the data either with plots or with summary statistics. The first few lines of the dataset are given below:
+
+```{r pndr2, echo = FALSE, results = 'asis'}
+print(xtable(iris[1:7,], 
+             align = rep("center",6), 
+             caption = "<b>Table 1</b>: A descriptive caption"),
+      type = "html",
+      html.table.attributes = getOption("xtable.html.table.attributes",
+                                          paste("align =\"center\" 
+                                                border=0 cellpadding=\"3\" 
+                                                id=\"test1\"")),
+      include.rownames = FALSE
+      )
+```
+
+<center>
+```{r htmlTable1, echo = FALSE, message = FALSE}
+data(Cars93)
+htmlTable(with(Cars93, table(Type, Origin)),
+          cgroup = c( "Origin"),
+          n.cgroup = c(2),
+          rgroup = c("Type"),
+          n.rgroup = 6)
+```
+</center>
+
+First, let's explore the whole dataset. We can print summary tables by each variable using the stargazer function out of a package by the same name. This is the output:
+
+<center>
+```{r dataset, echo = FALSE, results='asis'}
+stargazer(iris, float = FALSE, iqr = TRUE, type = "html")
+```
+<b>Table 2</b>: Another descriptive caption
+</center>
+
+In Table 2, we see the summary output of each variable. We also may want to subset our data by species and look at summary statistics. Consider the beanplot's below.
+<center>
+```{r sep, fig.width = 8, fig.height=8, fig.show='hold', htmlcap="<b>Figure 1</b>: An interesting Figure Caption", echo=FALSE}
+par(mfrow = c(2,2))
+beanplot(Sepal.Length ~ Species, data = iris, ylab = "Sepal Length", xlab = "Species", col = "beige", method = "jitter")
+beanplot(Sepal.Width ~ Species, data = iris, ylab = "Sepal Width", xlab = "Species", col = "beige", method = "jitter")
+beanplot(Petal.Length ~ Species, data = iris, ylab = "Petal Length", xlab = "Species", col = "beige", method = "jitter")
+beanplot(Petal.Width ~ Species, data = iris, ylab = "Petal Width", xlab = "Species", col = "beige", method = "jitter")
+```
+</center>
+
+We can also visualize these summary statistics with a box-plot. The box-plot given in Figure blank
+
+<center>
+```{r bplot1, echo = FALSE, fig.height=4, fig.width=6, htmlcap = "<b>Figure 2</b>: Caption Here"}
+boxplot(iris[,1:4])
+```
+</center>
+Though this marginal information may be useful in an analysis, when exploring multivariate data such as this we may want to consider some pair-wise relationships
+
+<center>
+```{r pairsplot, echo=FALSE, fig.width=8, fig.height=7, htmlcap = "<b>Figure 3</b>: A matrix of scatterplots of the quantitative variables"}
+par(mar = c(5,4,4,3))
+pairs.panels(iris[,1:4], 
+             labels = c("Sepal Length", 
+                        "Sepal Width",
+                        "Petal Length",
+                        "Petal Width"),
+             bg=c("red",
+                  "blue",
+                  "green")[iris$Species],
+             pch=20+as.numeric(iris$Species),
+             ellipses = FALSE,
+             oma=c(4,4,6,12))
+par(xpd=TRUE)
+legend(.9*par("usr")[2],  ## 1.05 times x1 limit
+       .7*par("usr")[4],   ## .8 times y2 limit
+       levels(iris$Species),
+       pch = c(21,22,23),
+       pt.bg = c("red", "blue", "green"))
+```
+</center>
+
+another way to plot this,
+
+<center>
+```{r, fig.width=10.5, fig.height=10, echo = FALSE, message = FALSE, warning=FALSE}
+ggplotly(ggpairs(iris,  mapping = aes(color = Species), colour='Species', alpha=0.4))
+```
+</center>
+
+or this
+
+<center>
+```{r}
+require(pairsD3)
+pairsD3(iris[,1:4],group=iris[,5])
+```
+</center>
+
+We first make a simple plot of sepal width and sepal length. 
+
+<center>
+```{r chunk1, echo = FALSE, htmlcap ="<b>Figure 4</b>: Scatterplot of Sepal Width by Sepal Length", fig.width = 6, fig.height=5}
+data(iris)
+
+par(mar = c(4,4,4,8), xpd=TRUE)
+plot(iris$Sepal.Width,
+     iris$Sepal.Length, 
+     bg = c("red", "blue", "green")[iris$Species],
+     xlab = "Sepal Width",
+     ylab = "Sepal Length",
+     pch = c(21,22,23)[iris$Species] ) # vector of pch numbers by species
+legend(1.05*par("usr")[2],  ## 1.05 times x1 limit
+       .8*par("usr")[4],   ## .8 times y2 limit
+       levels(iris$Species),
+       pch = c(21,22,23),
+       pt.bg = c("red", "blue", "green"))
+```
+</center>
+
+We can see in Figure blank that a clear relationship between sepal width and sepal length. We also see that this relationship may differ by species of iris. 
+
+A Simple Regression
+===================
+
+To explore the relationship we observed in figure blank, we will build a regression model. We can write out the relationship as:
+
+$$ Sepal Length = \beta_0 + \beta_1 Sepal Width + \beta_2 Sepal Width \times  $$
+
+```{r chunk2, echo = FALSE}
+lm1 <- lm(Sepal.Length ~ Sepal.Width * Species, data = iris)
+lm2 <- lm(Sepal.Length ~ Sepal.Width + Species, data = iris)
+lm3 <- lm(Sepal.Length ~ Sepal.Width , data = iris)
+lm4 <- lm(Sepal.Length ~ Species, data = iris)
+```
+
+
+We get the following model summary output. 
+
+```{r chunk3, echo = FALSE, results = 'asis'}
+print(xtable(summary(lm1), 
+             align = rep("center",5), 
+             caption = "<b>Table 3</b>: A descriptive caption"),
+      type = "html",
+      html.table.attributes = getOption("xtable.html.table.attributes",
+                                          paste("align =\"center\" border=0 cellpadding=\"3\" id=\"test1\"")),
+      include.rownames = TRUE
+      )
+```
+
+
+In Table blank, we see that 
+
+We can also conduct an Analysis of Variance (ANOVA) to test 
+
+
+We might wonder if we need to model the interaction term
+
+```{r anova, echo = FALSE, results='asis'}
+print(xtable(anova(lm1), 
+             align = rep("center",6), 
+             caption = "<b>Table 4</b>: A descriptive caption"),
+      type = "html",
+      html.table.attributes = getOption("xtable.html.table.attributes",
+                                          paste("align =\"center\" border=0 cellpadding=\"3\" id=\"test1\"")),
+      include.rownames = TRUE
+      )
+```
+
+We can see from the ANOVA output that there isn't much evidence that the slope of the relationship between Sepal Width and Sepal Length differs by species. We might then test the additive effects. We give type II sums of squares in the additive model to get two tests we are interested in.
+
+```{r anova2, echo = FALSE, results='asis'}
+print(xtable(Anova(lm2, type = "II"), 
+             align = rep("center",5), 
+             caption = "<b>Table 5</b>: A descriptive caption"),
+      type = "html",
+      html.table.attributes = getOption("xtable.html.table.attributes",
+                                          paste("align =\"center\" border=0 cellpadding=\"3\" id=\"test1\"")),
+      include.rownames = TRUE
+      )
+```
+
+We see that the additive model seems appropriate. The diagnostic plots for this model are given in table
+
+```{r diagnostic, echo = FALSE, htmlcap= "<b>Figure 5</b>: Diagnostic plots for model fit", fig.height=12, fig.width=6, fig.align='center'}
+par(mfrow = c(2,2))
+plot(lm1)
+```
+
+Appendix
+========
+
+R-code
+------
+```{r pkgs, echo = TRUE, message = FALSE}
+```
+
+```{r pndr2, echo = TRUE, results = 'hide'}
+```
+
+```{r diagnostic, fig.show='hide'}
+```
+
+Document Creation Info
+----------------------
+```{r 12, echo = FALSE, message=FALSE, results = 'asis', message=FALSE, warning=FALSE}
+require(devtools)
+require(printr)
+require(knitr)
+pander(session_info())
+```
+
+
+References
+----------

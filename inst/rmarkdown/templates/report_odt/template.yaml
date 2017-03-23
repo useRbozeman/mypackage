@@ -1,0 +1,4 @@
+name: Report odt
+description: >
+ Template for creating a report for SCRS
+create_dir: true

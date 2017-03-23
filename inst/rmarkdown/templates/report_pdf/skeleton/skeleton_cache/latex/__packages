@@ -1,0 +1,13 @@
+base
+MASS
+xtable
+stargazer
+psych
+beanplot
+car
+pander
+ggplot2
+plotly
+knitr
+devtools
+printr

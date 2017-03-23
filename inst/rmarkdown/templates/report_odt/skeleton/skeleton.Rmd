@@ -1,0 +1,229 @@
+---
+title: "An Exploration into Three Closely Related Varieties of Iris"
+author: "Jordan Schupbach"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
+  odt_document:
+    reference_odt: template.odt
+    template: default.opendocument
+    fig_width: 4
+    fig_height: 4
+    fig_caption: true
+bibliography: bibliography.bib
+always_allow_html: yes
+---
+<!--- Install R packages -->
+```{r intall_pkgs, echo = FALSE, message = FALSE, results = 'hide', warning = FALSE}
+r <- getOption("repos")
+r["CRAN"] <- "http://cran.us.r-project.org"
+options(repos = r)
+rm(r)
+# Helper function to install a package if not installed and load
+use_package <- function(p) 
+{
+if (!is.element(p, installed.packages()[,1]))
+  install.packages(p, dep = TRUE)
+library(p, character.only = TRUE)
+}
+
+# Base R packages: (no need to check if installed)
+library(MASS)
+
+# Non-base packages
+use_package('xtable')  ## For printing tables
+options(xtable.comment = FALSE)
+use_package('stargazer') ## For printing summary data and anova tables
+use_package('psych') ## Pairs Plot (consider ggpairs in GGally)
+use_package('beanplot') ## For beanplots (AKA violin plots)
+use_package('car') ## Some nice diagnostic plots?
+use_package('pander') ## Markdown tables
+use_package('ggplot2') ## Good overall plotting library
+use_package('knitr') ## To define htmlcap below (and more?)
+use_package('jpeg')
+use_package('grid')
+use_package('gridExtra')
+use_package('devtools')
+
+# Non-maintained packages
+# printr
+if (!is.element('printr', installed.packages()[,1]))
+install_github("yihui/printr")
+library(printr)
+```
+<!--- Install R packages -->
+<!--- Set Global Knitr options -->
+```{r global_options, echo = FALSE}
+knitr::opts_chunk$set(cache = TRUE,  # Automatic cache for quick compiles
+		      echo = FALSE)              # Only print R code if you must
+```
+<!--- Set Global Knitr options -->
+
+```{data, echo = FALSE}
+data(iris)
+```
+
+Introduction
+============
+
+This famous iris data set, collected by Anderson [@anderson:1936] and used by Fisher [@fisher:1936], gives the measurements in centimeters of the variables sepal length and width and petal length and width, respectively, for 50 flowers from each of 3 species of iris. The species are Iris setosa, versicolor, and virginica. They are extremely similar species of iris, but do have some blank differences. In <a href="#plt1">Plot 1</a>  we give images of the three iris species. 
+
+```{r plt1, echo = FALSE, fig.width = 7, fig.height=3.6, fig.cap = "Figure 1: Three species of iris; versicolor, virginica and setosa"}
+img1 <- readJPEG("iris_setosa.jpg")
+img2 <- readJPEG("iris_virginica.jpg")
+img3 <- readJPEG("iris_versicolor.jpg")
+img1 <- rasterGrob(img1, interpolate = FALSE)
+img2 <- rasterGrob(img2, interpolate = FALSE)
+img3 <- rasterGrob(img3, interpolate = FALSE)
+grid.arrange(img1, img2, img3, ncol = 3)
+```
+
+Description of Data
+==================
+
+This dataset has 1 categorical variable and 4 quantitative variables. Whether a variable is the explanatory variable or the dependent variable may depend on the model being considered motivated by some question of interest. Before looking at any models, we want to get familiar with the data. In the very least, we will want to summarize the data either with plots or with summary statistics. The first few lines of the dataset are given below:
+
+```{r pndr2, echo = FALSE, results = 'asis'}
+pander(iris[1:7,])
+```
+Table: A table of the first 7 lines of the dataset
+
+
+First, let's explore the whole dataset. We can print summary tables by each variable using the pander function out of a package by the same name. This is the output:
+
+```{r dataset, echo = FALSE, results='asis'}
+pander(summary(iris))
+```
+
+In Table 2, we see the summary output of each variable. We also may want to subset our data by species and look at summary statistics. Consider the beanplot's below.
+
+```{r sep, fig.width = 6, fig.height=6, fig.show='hold', echo=FALSE, fig.cap = "Figure 2: Beanplots of variables by species"}
+par(mfrow = c(2,2))
+beanplot(Sepal.Length ~ Species, data = iris, ylab = "Sepal Length", xlab = "Species", col = "beige", method = "jitter")
+beanplot(Sepal.Width ~ Species, data = iris, ylab = "Sepal Width", xlab = "Species", col = "beige", method = "jitter")
+beanplot(Petal.Length ~ Species, data = iris, ylab = "Petal Length", xlab = "Species", col = "beige", method = "jitter")
+beanplot(Petal.Width ~ Species, data = iris, ylab = "Petal Width", xlab = "Species", col = "beige", method = "jitter")
+```
+
+We can also visualize these summary statistics with a box-plot. The box-plot given in Figure blank
+
+```{r bplot1, echo = FALSE, fig.height=4, fig.width=6, fig.cap = "Figure 3: A boxplot of the variables"}
+boxplot(iris[,1:4])
+```
+
+Though this marginal information may be useful in an analysis, when exploring multivariate data such as this we may want to consider some pair-wise relationships
+
+```{r pairsplot, echo=FALSE, fig.width=6, fig.height=6, fig.cap = "Figure 4: A pairs plot of the data"}
+par(mar = c(5,4,4,3))
+pairs.panels(iris[,1:4], 
+             labels = c("Sepal Length", 
+                        "Sepal Width",
+                        "Petal Length",
+                        "Petal Width"),
+             bg=c("red",
+                  "blue",
+                  "green")[iris$Species],
+             pch=20+as.numeric(iris$Species),
+             ellipses = FALSE,
+             oma=c(4,4,6,12))
+par(xpd=TRUE)
+legend(.9*par("usr")[2],  ## 1.05 times x1 limit
+       .7*par("usr")[4],   ## .8 times y2 limit
+       levels(iris$Species),
+       pch = c(21,22,23),
+       pt.bg = c("red", "blue", "green"))
+```
+
+
+We first make a simple plot of sepal width and sepal length. 
+
+```{r chunk1, echo = FALSE, fig.cap ="Figure 6: Scatterplot of Sepal Width by Sepal Length", fig.width = 6, fig.height=5}
+data(iris)
+
+par(mar = c(4,4,4,8), xpd=TRUE)
+plot(iris$Sepal.Width,
+     iris$Sepal.Length, 
+     bg = c("red", "blue", "green")[iris$Species],
+     xlab = "Sepal Width",
+     ylab = "Sepal Length",
+     pch = c(21,22,23)[iris$Species] ) # vector of pch numbers by species
+legend(1.05*par("usr")[2],  ## 1.05 times x1 limit
+       .8*par("usr")[4],   ## .8 times y2 limit
+       levels(iris$Species),
+       pch = c(21,22,23),
+       pt.bg = c("red", "blue", "green"))
+```
+
+We can see in Figure blank that a clear relationship between sepal width and sepal length. We also see that this relationship may differ by species of iris. 
+
+A Simple Regression
+===================
+
+To explore the relationship we observed in figure blank, we will build a regression model. We can write out the relationship as:
+
+$$ Sepal Length = \beta_0 + \beta_1 Sepal Width + \beta_2 Sepal Width \times stuff  $$
+
+```{r chunk2, echo = FALSE}
+lm1 <- lm(Sepal.Length ~ Sepal.Width * Species, data = iris)
+lm2 <- lm(Sepal.Length ~ Sepal.Width + Species, data = iris)
+lm3 <- lm(Sepal.Length ~ Sepal.Width , data = iris)
+lm4 <- lm(Sepal.Length ~ Species, data = iris)
+```
+
+We get the following model summary output. 
+
+```{r chunk3, echo = FALSE, results = 'asis'}
+pander(summary(lm1))
+```
+
+
+In Table blank, we see that 
+
+We can also conduct an Analysis of Variance (ANOVA) to test 
+
+
+We might wonder if we need to model the interaction term
+
+```{r anova, echo = FALSE, results='asis'}
+pander(anova(lm1))
+```
+
+
+We can see from the ANOVA output that there isn't much evidence that the slope of the relationship between Sepal Width and Sepal Length differs by species. We might then test the additive effects. We give type II sums of squares in the additive model to get two tests we are interested in.
+
+```{r anova2, echo = FALSE, results='asis'}
+pander(Anova(lm2, type = "II"))
+```
+
+
+We see that the additive model seems appropriate. The diagnostic plots for this model are given in table
+
+```{r diagnostic2, echo = FALSE, fig.height=8, fig.width=8, fig.align='center', fig.show='hold'}
+par(mfrow=c(2,2))
+plot(lm1)
+```
+
+Appendix
+========
+
+R-code
+------
+```{r pkgs, echo = TRUE, message = FALSE}
+```
+
+```{r pndr2, echo = TRUE, results = 'hide'}
+```
+
+```{r diagnostic, fig.show='hide'}
+```
+
+Document Creation Info
+----------------------
+```{r 12, echo = FALSE, message=FALSE, results = 'asis', message=FALSE, warning=FALSE}
+require(devtools)
+require(printr)
+require(knitr)
+pander(session_info())
+```
+
+References
+----------

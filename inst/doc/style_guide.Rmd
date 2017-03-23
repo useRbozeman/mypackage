@@ -1,0 +1,139 @@
+---
+title: "R Style Guide"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{mypackage: A style guide} 
+  %\VignettePackage{mypackage}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+Style Guide
+===========
+
+It is important to stick to a common coding convention; because, although you may be the only one working on a file, you may not be the only one reading it. Hopefully, there is reason behind the convention. My coding convention is generally laisse faire, but with a few rules that I think are important. There are other style guides that already exist, including one from [google](https://google.github.io/styleguide/Rguide.xml) and one from [Hadley Wickham](http://adv-r.had.co.nz/Style.html). This style guide is an adaptation off of these two.   
+
+File names
+----------
+
+File names should be meaningful and in lower camel case. For example:
+
+```
+stat_501_hw4.rnw
+```
+
+Document Headings
+-----------------
+
+Each document should have a document heading in comments at the beginning of the document. Something like this for, say, a .Rnw file or the same using number symbols for .R or html comment tags for .Rmd files. 
+
+```tex
+%%%%%%%%%%%%%%%%%%%%%%%%
+% Filename:  
+% Description:
+%
+%
+% Author:
+% Date:
+%%%%%%%%%%%%%%%%%%%%%%%%
+```
+
+Identifiers
+-----------
+
+As with file names, identifiers (objects) should also be meaningful and in lower camel case. For example:
+
+```r
+height_by_age <- boxplot(height ~ age_factor)
+print(height_by_age)
+```
+
+Spacing
+--------
+
+Spaces should be placed around all infix operators (i.e., `=`, `+`, `-`, `<-`, etc.). For example:
+
+```r
+a <- 10
+b <- 20
+c <- (a + b) / 10
+```
+
+An excpetion to the rule is for colons, `:`. For example:
+
+```r
+xtable::xtable(head(data_set))
+
+plot(1:20, 2:21)
+```
+
+Also, spaces should be after commas, and never before.
+
+Curly Braces
+-------------
+
+Opening curly braces should not go on it's own line, and should be followed by a new line. A closing curly brace should always be on it's own line, unless followed by an else. For example:
+
+```r
+for(i in 1:n){
+  do(stuff)
+}
+
+if (logical == TRUE) { 
+  do(stuff)
+} else {
+  do(other_stuff)
+}
+```
+
+Line Length
+------------
+
+It depends on the font size used in a document. Whatever the lenght is to keep printed code within the margins. People often cite 80 characters.
+
+Assignment
+----------
+
+Use `<-` for assignment (not `=`). Use `=` for function arguments. 
+
+Indentation
+-----------
+
+Generally, use two spaces for indention. The exception is for function calls that span more than one line. For example
+
+```r
+for(i in 1:I){
+  for(j in 1:J){
+    c <- c + a[i,j] * b[i,j]
+  }
+}
+
+plot(x = x_obj,
+     y = y_obj,
+     ylab = "Y Label",
+     xlab = "X Label",
+     main = "Main Title",
+     pch = 20)
+```
+
+Commenting
+----------
+
+Comments should begin with single `#` following a single space. Block comments should begin with two `#` symbols followed by a single space. For example:
+
+```r
+## Data Conditioning
+
+# Step 1: read in the data
+data <- read.csv("my_important_data.csv", header = TRUE)
+
+# Step 2: Change variables into factors
+data$var1 <- factor(data$var1)
+data$var2 <- factor(data$var2)
+```
+
+Attach
+-------
+
+Don't use it. Ever. (Perhaps I am most irrationally dogmatic about this issue)

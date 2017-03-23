@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"$if(lang)$ lang="$lang$" xml:lang="$lang$"$endif$$if(dir)$ dir="$dir$"$endif$>
+	<head>
+		  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		    <meta http-equiv="Content-Style-Type" content="text/css" />
+		      <meta name="generator" content="pandoc" />
+		      $for(author-meta)$
+		        <meta name="author" content="$author-meta$" />
+			$endfor$
+			$if(date-meta)$
+			  <meta name="date" content="$date-meta$" />
+			  $endif$
+			  $if(keywords)$
+			    <meta name="keywords" content="$for(keywords)$$keywords$$sep$, $endfor$" />
+			    $endif$
+			      <title>$if(title-prefix)$$title-prefix$ – $endif$$pagetitle$</title>
+			        <style type="text/css">code{white-space: pre;}</style>
+				$if(quotes)$
+				  <style type="text/css">q { quotes: "“" "”" "‘" "’"; }</style>
+				  $endif$
+				  $if(highlighting-css)$
+				    <style type="text/css">
+$highlighting-css$
+  </style>
+  $endif$
+  <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link href="bootstrap-toc.css" rel="stylesheet" type="text/css">
+  $for(css)$
+    <link rel="stylesheet" href="$css$" type="text/css" />
+    $endfor$
+    $if(math)$
+      $math$
+      $endif$
+      $for(header-includes)$
+        $header-includes$
+	$endfor$
+	</head>
+	<body data-spy="scroll" data-target="#toc">
+		$for(include-before)$
+		$include-before$
+		$endfor$
+<div class="container">
+    <div class="row">
+      <!-- sidebar, which will move to the top on a small screen -->
+      <div class="col-sm-2">
+        <nav id="toc" data-spy="affix" data-toggle="toc"></nav>
+      </div>
+      <!-- main content area -->
+      <div class="col-sm-10">
+		$if(title)$
+		<div id="$idprefix$header">
+	<center><p style="color:#013E7D; font-size:300%; font-family:Serif; font-weight: normal; padding-bottom: 1cm; text-align: center;" class="title">$title$</p></center>
+<br>
+$if(author)$
+<center><p style="text-align: center; font-size:200%; font-family:Serif; font-weight:normal;">$author$</p></center>
+$endif$
+			$if(date)$
+<center><p style="font-size:100%; font-family:Serif;font-style:normal; padding-left: 2.5cm; padding-right: 2.5cm; text-align: center;"> $date$</p> </center>
+$endif$
+		</div>
+		$endif$
+		$if(toc)$
+		<div id="$idprefix$TOC">
+			$toc$
+		</div>
+		$endif$
+		$body$
+		$for(include-after)$
+		$include-after$
+		$endfor$
+      </div>
+    </div>
+  </div>
+	</body>
+</html>
+<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script src="bootstrap-toc.js"></script>
+<script src="http://code.jquery.com/jquery-2.1.2.min.js"></script>
