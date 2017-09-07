@@ -1,0 +1,4 @@
+name: Example report for pdf
+description: >
+ Example report for STAT 411/412
+create_dir: true

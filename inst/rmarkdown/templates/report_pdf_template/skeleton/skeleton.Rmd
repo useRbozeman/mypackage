@@ -1,0 +1,107 @@
+---
+title: "Your Title"
+author: "Your Name"
+output:
+  pdf_document:
+    template: report.latex
+header-includes: \def\tightlist{booktabs}
+spacing: 1
+bibliography: bibliography.bib
+titlepage: yes
+---
+
+```{r environment, echo = FALSE, message = FALSE}
+# Initialize environment
+# R environment
+# {{{ Step 1: Set up working environment
+#   a. Install needed packages
+#   b. Place User defined functions here
+####################################
+
+# {{{ a. Install Needed packages:
+# Set CRAN location for installing packages
+r <- getOption("repos")
+r["CRAN"] <- "http://cran.us.r-project.org"
+options(repos = r)
+rm(r)
+
+# Helper function to install a package if not installed and load
+use_package <- function(p) {
+if (!is.element(p, installed.packages()[,1]))
+  install.packages(p, dep = TRUE)
+library(p, character.only = TRUE)
+}
+
+use_package('xtable')
+use_package('pander')
+
+# }}} 1. Install Needed packages:
+
+# {{{ b. Place User defined functions here
+
+# }}} b. Place User defined functions here
+
+# }}} Step 1: Set up working environment
+
+# Knitr/rmarkdown Settings
+
+```
+
+```{r analysis, echo = FALSE, results = 'hide', fig.keep='none', message = FALSE, error = FALSE}
+# Import the data
+
+# Condition the data
+
+# Make some plots of the data
+
+# Conduct Analysis
+
+# Summarize
+```
+
+Introduction
+============
+
+
+Statistical Methods Used
+========================
+
+Analysis was conducted using [@r].
+
+Summary of Statistical Findings
+===============================
+
+
+Scope of Inference
+==================
+
+\newpage
+
+Appendix
+========
+
+Tables
+------
+
+<!-- Remember to wrap tables and figures with \FloatBarrier -->
+
+Figures
+-------
+
+R-code
+------
+
+```{r analysis, echo = TRUE, results = 'hide', fig.keep='none', message = FALSE, error = FALSE, size='tiny'}
+```
+
+Document Creation Info
+----------------------
+```{r 12, echo = FALSE, message=FALSE, results = 'asis', message=FALSE, warning=FALSE}
+require(devtools)
+require(printr)
+require(knitr)
+pander(session_info())
+```
+
+References
+=========

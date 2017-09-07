@@ -1,10 +1,10 @@
 ---
-title: "mypackage: A set of functions and templates I maintain"
+title: "MethodsOfDataAnalysis: A package with a template for STAT 411/412"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{mypackage: a set of functions and templates I maintain}
-  %\VignettePackage{mypackage}
+  %\VignetteIndexEntry{MethodsOfDataAnalysis: A package with a template for STAT 411/412}
+  %\VignettePackage{MethodsOfDataAnalysis}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
@@ -12,8 +12,8 @@ vignette: >
 
 ```{r, echo = FALSE, message = FALSE}
 knitr::opts_chunk$set(comment = "")
-library(mypackage)
+library(MethodsOfDataAnalysis)
 ```
 
-This package is meant to be a starter package for people that want to maintain a package as a means to retain R knowledge. This is an example vignette. One might show examples of various parts of the package using vignettes. This can supplement the help documentation.:w
+This package contains an R markdown template for STAT 411/412 reports. In RStudio, you can click on new rmarkdown document and then from templates to find the templates.
 

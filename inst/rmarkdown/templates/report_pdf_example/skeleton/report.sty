@@ -1,0 +1,123 @@
+% report.sty
+% author: Jordan Schupbach
+% date: August 30, 2017
+% description:
+%    A style file for my reports
+
+% Packages {{{
+
+% \usepackage{utopia} % different fonts
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{float}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage{lastpage}
+\usepackage{url}
+\urlstyle{same}
+\usepackage{titling}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage{longtable, booktabs}
+\usepackage{textcomp} % copyright symbol
+\usepackage{natbib}
+\usepackage{placeins}
+% }}}
+% Color definitions {{{
+
+% http://www.montana.edu/brandtoolkit/
+\usepackage{xcolor}
+
+% by default, use black for all colors
+\definecolor{cscrsColor1}{HTML}{000000} % MSU blue
+\definecolor{cscrsColor2}{HTML}{000000} % MSU yellow
+\definecolor{cscrsColor3}{HTML}{000000} % MSU gold
+\definecolor{cscrsColor4}{HTML}{000000} % MSU red
+\definecolor{cscrsColor5}{HTML}{000000} % MSU green
+\definecolor{cscrsColor6}{HTML}{000000} % MSU light blue
+\definecolor{cscrsColor7}{HTML}{000000} % MSU light yellow
+\definecolor{cscrsColor8}{HTML}{000000} % MSU rich black
+\definecolor{cscrsColor9}{HTML}{000000} % MSU murky blue
+\definecolor{cscrsColor10}{HTML}{000000} % MSU grayish
+\definecolor{cscrsColor11}{HTML}{000000} % MSU purple
+\definecolor{cscrsColor12}{HTML}{000000} % MSU grayish 2
+
+\DeclareOption{msucolor}{
+    \definecolor{cscrsColor1}{HTML}{013E7D} % MSU blue
+    \definecolor{cscrsColor2}{HTML}{F0AD00} % MSU yellow
+    \definecolor{cscrsColor3}{HTML}{B79257} % MSU gold
+    \definecolor{cscrsColor4}{HTML}{F15A38} % MSU red
+    \definecolor{cscrsColor5}{HTML}{C2D251} % MSU green
+    \definecolor{cscrsColor6}{HTML}{3C9CD7} % MSU light blue
+    \definecolor{cscrsColor7}{HTML}{F7EF6F} % MSU light yellow
+    \definecolor{cscrsColor8}{HTML}{070004} % MSU rich black
+    \definecolor{cscrsColor9}{HTML}{25353E} % MSU murky blue
+    \definecolor{cscrsColor10}{HTML}{4D3E3B} % MSU grayish
+    \definecolor{cscrsColor11}{HTML}{56344E} % MSU purple
+    \definecolor{cscrsColor12}{HTML}{817C80} % MSU grayish 2
+}
+
+\ProcessOptions\relax
+
+% }}}
+% Page setup {{{
+
+\special{papersize=8.5in,11in}
+\textheight=21.5cm
+\textwidth=14.95cm
+\topmargin=-5.5mm
+\oddsidemargin=8mm
+\evensidemargin=8mm
+\setlength{\parskip}{0pt}
+
+% }}}
+% hyperref setup {{{
+
+\hypersetup{breaklinks=true,
+            bookmarks=true,
+            colorlinks=true,
+            citecolor=cscrsColor6,
+            urlcolor=cscrsColor4,
+            linkcolor=cscrsColor3,
+            pdfborder={0 0 0}}
+
+% }}}
+% headers and footers / fancyhdr {{{
+
+% }}}
+% headings {{{
+
+% title {{{
+
+% titlepage  {{{2
+\if@titlepage
+\renewcommand{\maketitle}{\begin{titlepage}%
+        \let\footnotesize\small
+        \let\footnoterule\relax
+        \let \footnote \thanks
+        \null\vfil
+        \vskip 20\p@
+        \begin{center}%
+            {\color{cscrsColor1}\LARGE \bfseries \@title \par}%
+            \vskip 1em%
+            {\color{cscrsColor1}\bfseries \@author \par}%
+            \vskip 1em%
+            {\color{cscrsColor1}\bfseries \@date \par}%
+        \end{center}
+    \end{titlepage}%
+    \setcounter{footnote}{0}%
+    \global\let\thanks\relax
+    \global\let\maketitle\relax
+    \global\let\@thanks\@empty
+    \global\let\@author\@empty
+    \global\let\@date\@empty
+    \global\let\@title\@empty
+    \global\let\title\relax
+    \global\let\author\relax
+    \global\let\date\relax
+    \global\let\and\relax
+} % 2}}}
+% }}}
+% vim: foldmethod=marker:

@@ -3,8 +3,8 @@ title: "The package: Speeding up Computation in R"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{mypackage: functions and templates I keep}
-  %\VignettePackage{mypackage}
+  %\VignetteIndexEntry{MethodsOfDataAnalysis: functions and templates I keep}
+  %\VignettePackage{MethodsOfDataAnalysis}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
@@ -12,7 +12,7 @@ vignette: >
 
 ```{r, echo = FALSE, message = FALSE}
 knitr::opts_chunk$set(comment = "")
-library(mypackage)
+library(MethodsOfDataAnalysis)
 ```
 
 This is a package meant to be a starter R packages for users interested in holding onto functions one might use regularly.

@@ -3,8 +3,8 @@ title: "R Style Guide"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{mypackage: A style guide} 
-  %\VignettePackage{mypackage}
+  %\VignetteIndexEntry{MethodsOfDataAnalysis: A style guide} 
+  %\VignettePackage{MethodsOfDataAnalysis}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---

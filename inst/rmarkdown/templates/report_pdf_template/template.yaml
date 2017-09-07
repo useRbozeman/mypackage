@@ -1,0 +1,4 @@
+name: Template for pdf report
+description: >
+ Example report for STAT 411/412
+create_dir: true

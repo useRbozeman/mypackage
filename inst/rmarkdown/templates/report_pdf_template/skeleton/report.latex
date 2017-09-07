@@ -1,0 +1,64 @@
+% cscrs theme
+
+$if(titlepage)$
+    $if(fontsize)$
+        \documentclass[$fontsize$, titlepage, twoside]{article}
+    $else$
+        \documentclass[12pt, titlepage, twoside]{article}
+    $endif$
+$else$
+    $if(fontsize)$
+        \documentclass[$fontsize$, twoside]{article}
+    $else$
+        \documentclass[12pt, twoside]{article}
+    $endif$
+$endif$
+
+\usepackage{report}
+
+$if(header-includes)$
+$for(header-includes)$
+$header-includes$
+$endfor$
+$endif$
+
+$if(highlighting-macros)$
+$highlighting-macros$
+$endif$
+
+$if(spacing)$
+\usepackage{setspace}
+$endif$
+
+$if(title)$
+\title{$title$}
+$endif$
+
+$if(author)$
+\author{$author$}
+$endif$
+
+$if(date)$
+\date{$date$}
+$else$
+\date{\today}
+$endif$
+
+\begin{document}
+
+$if(title)$
+\maketitle
+$endif$
+
+$if(spacing)$
+\setstretch{$spacing$}
+$endif$
+
+$body$
+
+$if(bibliography)$
+\bibliographystyle{natbib}
+\bibliography{$bibliography$}
+$endif$
+
+\end{document}

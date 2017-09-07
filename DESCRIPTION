@@ -1,11 +1,11 @@
-Package: mypackage 
+Package: MethodsOfDataAnalysis 
 Type: Package
-Title: A random collection of things
+Title: A package for STAT411/412 at MSU
 Version: 1.0
-Date: 2015-05-27
+Date: 2017-08-27
 Author: Jordan Schupbach
 Maintainer: Jordan Schupbach <jordans1882@gmail.com>
-Description: A collection of random functions I've written over the years that I find to be useful.
+Description: A collection of templates for STAT411.
 License: MIT
 Suggests: knitr
 VignetteBuilder: knitr
